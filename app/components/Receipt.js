@@ -156,7 +156,7 @@ const handleDownloadPDF = async () => {
             <br />
             <br />
             <br />
-            <p >Oluwabusola Olajide</p>
+            <p className="uppercase">Oluwabusola Olajide</p>
             <p >Manager{`'`}s Signature</p>
         </div>
         <br />
