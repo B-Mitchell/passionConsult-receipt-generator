@@ -86,7 +86,7 @@ const handleDownloadPDF = async () => {
             </tr>
             <tr>
                 <td className="border px-4 py-1">Kind Attn:</td>
-                <td className="border px-4 py-2"></td>
+                <td className="border px-4 py-2">{data.kindAttn}</td>
                 <td className="border px-2 py-2"></td>
                 <td className="border px-4 py-2"></td>
                 <td className="border px-2 py-2"></td>
@@ -170,7 +170,6 @@ const handleDownloadPDF = async () => {
                 <Image src={nissanImg} width={60} height={20} alt="Nissan logo" />
                 <Image src={mercedesImg} width={90} height={20} alt="Mercedes logo" />
             </div>
-
             {/* Divider Section */}
             <div className="flex-1 ml-4">
                 <div className="border-black border-b-2"></div>
