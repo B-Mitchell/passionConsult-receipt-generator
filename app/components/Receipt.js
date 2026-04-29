@@ -33,27 +33,24 @@ export default function Receipt({ data }) {
       format: 'a4',
     });
 
-    const pageWidth = 210;
-    const pageHeight = 297;
-    const imgWidth = 210;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 8;
+    const maxWidth = pageWidth - margin * 2;
+    const maxHeight = pageHeight - margin * 2;
 
-    if (imgHeight <= pageHeight) {
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-    } else {
-      let heightLeft = imgHeight;
-      let position = 0;
+    let imgWidth = maxWidth;
+    let imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
+    if (imgHeight > maxHeight) {
+      imgHeight = maxHeight;
+      imgWidth = (canvas.width * imgHeight) / canvas.height;
     }
+
+    const x = (pageWidth - imgWidth) / 2;
+    const y = (pageHeight - imgHeight) / 2;
+
+    pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
 
     pdf.save('receipt.pdf');
   };
@@ -130,11 +127,11 @@ export default function Receipt({ data }) {
           <div className="relative z-10">
             <div className="mb-8 flex w-full items-center justify-between gap-4">
               <div>
-                <Image src="/passion_logo.jpg" width={200} height={40} alt="Passion Consults logo" />
+                <Image src="/passion_logo.jpg" width={200} height={40} alt="Passion Fort logo" />
               </div>
 
               <div className="w-[20rem]">
-                <h2 className="mb-1 text-end text-3xl font-bold text-blue-900 underline">Passion Consults</h2>
+                <h2 className="mb-1 text-end text-3xl font-bold text-blue-900 underline">Passion Fort</h2>
                 <p className="text-end text-sm whitespace-normal">31 Ogunsola street oke ira ogba lagos</p>
                 <p className="text-end text-sm">Tel: 08068989204</p>
                 <p className="text-end text-sm">Alt: 0709528181</p>

@@ -8,8 +8,8 @@ const lexend = Lexend({
 });
 
 export const metadata = {
-  title: 'Passion Consults',
-  description: 'Passion Consult Receipt Generator',
+  title: 'Passion Fort',
+  description: 'Passion Fort Receipt Generator',
 };
 
 export default function RootLayout({ children }) {

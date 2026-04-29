@@ -22,13 +22,13 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <Image
                 src="/passion_logo.jpg"
-                alt="Passion Consults logo"
+                alt="Passion Fort logo"
                 width={160}
                 height={60}
                 priority
               />
               <div>
-                <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Passion Consults Receipt Generator</h1>
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Passion Fort Receipt Generator</h1>
                 <p className="text-sm text-slate-600">Create, preview, and download professional receipts in one flow.</p>
               </div>
             </div>
