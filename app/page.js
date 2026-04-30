@@ -25,6 +25,7 @@ export default function Home() {
                 alt="Passion Fort logo"
                 width={160}
                 height={60}
+                className="h-auto w-[128px] object-contain md:w-[160px]"
                 priority
               />
               <div>

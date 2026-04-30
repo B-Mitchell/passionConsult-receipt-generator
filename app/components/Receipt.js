@@ -1,23 +1,39 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRef } from 'react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
-import Image from 'next/image';
-import toyotaImg from '../../public/toyotalogo.png';
-import fordImg from '../../public/fordLogo.png';
-import hondaImg from '../../public/hondalogo.jpg';
-import nissanImg from '../../public/nissanlogo.png';
-import mercedesImg from '../../public/mercedesBenz.png';
 
 export default function Receipt({ data }) {
   const receiptRef = useRef(null);
 
+  const waitForReceiptImages = async () => {
+    if (!receiptRef.current) return;
+
+    const images = Array.from(receiptRef.current.querySelectorAll('img'));
+    await Promise.all(
+      images.map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve) => {
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        });
+      }),
+    );
+  };
+
   const generateCanvas = async () => {
     if (!receiptRef.current) return null;
+    await waitForReceiptImages();
 
-    return html2canvas(receiptRef.current, {
+    const target = receiptRef.current;
+
+    return html2canvas(target, {
       scale: 2,
       useCORS: true,
       backgroundColor: '#ffffff',
+      scrollY: -window.scrollY,
+      windowWidth: target.scrollWidth,
+      windowHeight: target.scrollHeight,
     });
   };
 
@@ -119,15 +135,15 @@ export default function Receipt({ data }) {
   return (
     <div className="space-y-4">
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-3">
-        <div className="relative min-w-[44rem] overflow-hidden rounded-lg bg-white p-4 shadow-sm md:p-6" ref={receiptRef}>
-          <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 opacity-[0.045]">
-            <Image src="/passion_logo.jpg" alt="Receipt watermark" fill sizes="360px" className="object-contain" />
+        <div className="relative w-[794px] rounded-lg bg-white p-4 shadow-sm md:p-5" ref={receiptRef}>
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 opacity-[0.04]">
+            <img src="/passion_logo.jpg" alt="Receipt watermark" className="h-full w-full object-contain" />
           </div>
 
-          <div className="relative z-10">
-            <div className="mb-8 flex w-full items-center justify-between gap-4">
+          <div className="relative z-10 text-[12.5px] leading-[1.35]">
+            <div className="mb-6 flex w-full items-start justify-between gap-4">
               <div>
-                <Image src="/passion_logo.jpg" width={200} height={40} alt="Passion Fort logo" />
+                <img src="/passion_logo.jpg" alt="Passion Fort logo" className="h-[86px] w-auto object-contain" />
               </div>
 
               <div className="w-[20rem]">
@@ -138,102 +154,102 @@ export default function Receipt({ data }) {
               </div>
             </div>
 
-            <table className="mb-6 w-full table-fixed border-collapse text-sm">
+            <table className="mb-4 w-full table-fixed border-collapse text-sm">
               <thead>
                 <tr>
-                  <th className="border border-slate-400 px-4 py-2">CUSTOMER DETAILS</th>
-                  <th className="border border-slate-400 px-4 py-2"></th>
-                  <th className="border border-slate-400 px-2 py-2"></th>
-                  <th className="border border-slate-400 px-4 py-2">{data.date}</th>
-                  <th className="border border-slate-400 px-4 py-2"></th>
+                  <th className="border border-slate-400 px-4 py-1.5">CUSTOMER DETAILS</th>
+                  <th className="border border-slate-400 px-4 py-1.5"></th>
+                  <th className="border border-slate-400 px-2 py-1.5"></th>
+                  <th className="border border-slate-400 px-4 py-1.5">{data.date}</th>
+                  <th className="border border-slate-400 px-4 py-1.5"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2">Name</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words">{data.customerName}</td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
+                  <td className="border border-slate-400 px-4 py-1.5">Name</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.customerName}</td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
+                  <td className="border border-slate-400 px-4 py-1"></td>
+                  <td className="border border-slate-400 px-4 py-1"></td>
+                  <td className="border border-slate-400 px-2 py-1"></td>
+                  <td className="border border-slate-400 px-4 py-1"></td>
+                  <td className="border border-slate-400 px-2 py-1"></td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
+                  <td className="border border-slate-400 px-4 py-1"></td>
+                  <td className="border border-slate-400 px-4 py-1"></td>
+                  <td className="border border-slate-400 px-2 py-1"></td>
+                  <td className="border border-slate-400 px-4 py-1"></td>
+                  <td className="border border-slate-400 px-2 py-1"></td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2 text-center text-sm font-bold italic text-amber-600">
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5 text-center text-sm font-bold italic text-amber-600">
                     No return, No refund.
                   </td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
                 </tr>
                 <tr>
                   <td className="border border-slate-400 px-4 py-1">Kind Attn:</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words">{data.kindAttn}</td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-2 py-2"></td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.kindAttn}</td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
                 </tr>
               </tbody>
             </table>
 
-            <table className="mb-6 w-full table-fixed border-collapse text-sm">
+            <table className="mb-4 w-full table-fixed border-collapse text-sm">
               <thead>
                 <tr>
-                  <th className="border border-slate-400 px-4 py-2"></th>
-                  <th className="border border-slate-400 px-4 py-2">DESCRIPTION</th>
-                  <th className="border border-slate-400 px-4 py-2">UNIT PRICE</th>
-                  <th className="border border-slate-400 px-4 py-2">NET VALUE</th>
+                  <th className="border border-slate-400 px-4 py-1.5"></th>
+                  <th className="border border-slate-400 px-4 py-1.5">DESCRIPTION</th>
+                  <th className="border border-slate-400 px-4 py-1.5">UNIT PRICE</th>
+                  <th className="border border-slate-400 px-4 py-1.5">NET VALUE</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2">MODEL</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words">{data.model}</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words">{data.unitPrice}</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words">{data.NetValue}</td>
+                  <td className="border border-slate-400 px-4 py-1.5">MODEL</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.model}</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.unitPrice}</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.NetValue}</td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2">TRIM</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words" colSpan={3}>{data.trim}</td>
+                  <td className="border border-slate-400 px-4 py-1.5">TRIM</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words" colSpan={3}>{data.trim}</td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2">TXMN</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words" colSpan={3}>{data.txmn}</td>
+                  <td className="border border-slate-400 px-4 py-1.5">TXMN</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words" colSpan={3}>{data.txmn}</td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2">ENGINE</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words" colSpan={3}>{data.engine}</td>
+                  <td className="border border-slate-400 px-4 py-1.5">ENGINE</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words" colSpan={3}>{data.engine}</td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2">CHASSIS</td>
-                  <td className="border border-slate-400 px-4 py-2 break-words" colSpan={3}>{data.chassis}</td>
+                  <td className="border border-slate-400 px-4 py-1.5">CHASSIS</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words" colSpan={3}>{data.chassis}</td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-2">TOTAL AMOUNT PAID</td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2"></td>
-                  <td className="border border-slate-400 px-4 py-2 break-words">{data.totalAmountPaid}</td>
+                  <td className="border border-slate-400 px-4 py-1.5">TOTAL AMOUNT PAID</td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.totalAmountPaid}</td>
                 </tr>
               </tbody>
             </table>
 
             {data.vehicleName && (
-              <div className="mt-4 ml-5">
-                <h3 className="my-2 text-xl font-bold">{data.vehicleName}</h3>
-                <ul className="list-disc pl-6 text-sm">
+              <div className="mt-3 ml-5">
+                <h3 className="my-1.5 text-xl font-bold">{data.vehicleName}</h3>
+                <ul className="list-disc pl-6 text-sm leading-[1.3]">
                   <li>{data.vehicleInfo1}</li>
                   <li>{data.vehicleInfo2}</li>
                   <li>{data.vehicleInfo3}</li>
@@ -241,22 +257,20 @@ export default function Receipt({ data }) {
               </div>
             )}
 
-            <div className="mb-10 mt-6">
+            <div className="mb-6 mt-4">
               <p>Thank you</p>
-              <br />
-              <br />
-              <br />
+              <div className="h-12"></div>
               <p className="uppercase">Oluwabusola Olajide</p>
               <p>Manager{`'`}s Signature</p>
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Image src={toyotaImg} width={60} height={20} alt="Toyota logo" />
-                <Image src={fordImg} width={60} height={20} alt="Ford logo" />
-                <Image src={hondaImg} width={60} height={20} alt="Honda logo" />
-                <Image src={nissanImg} width={60} height={20} alt="Nissan logo" />
-                <Image src={mercedesImg} width={90} height={20} alt="Mercedes logo" />
+                <img src="/toyotalogo.png" alt="Toyota logo" className="h-5 w-auto object-contain" />
+                <img src="/fordLogo.png" alt="Ford logo" className="h-5 w-auto object-contain" />
+                <img src="/hondalogo.jpg" alt="Honda logo" className="h-5 w-auto object-contain" />
+                <img src="/nissanlogo.png" alt="Nissan logo" className="h-5 w-auto object-contain" />
+                <img src="/mercedesBenz.png" alt="Mercedes logo" className="h-5 w-auto object-contain" />
               </div>
               <div className="ml-4 flex-1">
                 <div className="border-b-2 border-black"></div>
