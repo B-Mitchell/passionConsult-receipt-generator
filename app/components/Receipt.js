@@ -173,18 +173,18 @@ export default function Receipt({ data }) {
                   <td className="border border-slate-400 px-2 py-1.5"></td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-1"></td>
-                  <td className="border border-slate-400 px-4 py-1"></td>
-                  <td className="border border-slate-400 px-2 py-1"></td>
-                  <td className="border border-slate-400 px-4 py-1"></td>
-                  <td className="border border-slate-400 px-2 py-1"></td>
+                  <td className="border border-slate-400 px-4 py-1.5">Phone</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.customerPhone}</td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
                 </tr>
                 <tr>
-                  <td className="border border-slate-400 px-4 py-1"></td>
-                  <td className="border border-slate-400 px-4 py-1"></td>
-                  <td className="border border-slate-400 px-2 py-1"></td>
-                  <td className="border border-slate-400 px-4 py-1"></td>
-                  <td className="border border-slate-400 px-2 py-1"></td>
+                  <td className="border border-slate-400 px-4 py-1.5">Address</td>
+                  <td className="border border-slate-400 px-4 py-1.5 break-words">{data.customerAddress}</td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
+                  <td className="border border-slate-400 px-4 py-1.5"></td>
+                  <td className="border border-slate-400 px-2 py-1.5"></td>
                 </tr>
                 <tr>
                   <td className="border border-slate-400 px-4 py-1.5"></td>

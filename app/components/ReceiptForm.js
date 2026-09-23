@@ -6,6 +6,8 @@ const fieldGroups = [
     subtitle: 'Who the receipt is for',
     fields: [
       { label: 'Customer Name', key: 'customerName', placeholder: 'e.g. Adebayo Johnson', icon: 'user' },
+      { label: 'Customer Phone', key: 'customerPhone', type: 'tel', placeholder: 'e.g. 08068989204', icon: 'phone' },
+      { label: 'Customer Address', key: 'customerAddress', placeholder: 'e.g. 31 Ogunsola Street, Ikeja, Lagos', icon: 'location' },
       { label: 'Kind Attn', key: 'kindAttn', placeholder: 'e.g. Procurement Unit', icon: 'briefcase' },
       { label: 'Date', key: 'date', type: 'date', placeholder: '', icon: 'calendar' },
     ],
@@ -38,6 +40,8 @@ const fieldGroups = [
 
 const initialFormData = {
   customerName: '',
+  customerPhone: '',
+  customerAddress: '',
   kindAttn: '',
   model: '',
   trim: '',
@@ -54,6 +58,26 @@ const initialFormData = {
   vehicleInfo3: '',
 };
 
+const sampleFormData = {
+  customerName: 'Adebayo Johnson',
+  customerPhone: '08068989204',
+  customerAddress: '31 Ogunsola Street, Ikeja, Lagos',
+  kindAttn: 'Procurement Unit',
+  model: 'Toyota Camry 2020',
+  trim: 'XLE',
+  txmn: 'Automatic',
+  engine: '2.5L 4-Cylinder',
+  chassis: 'JTNB11HK2K3001234',
+  unitPrice: 'NGN 18,500,000',
+  NetValue: 'NGN 18,500,000',
+  totalAmountPaid: 'NGN 18,500,000',
+  date: new Date().toISOString().split('T')[0],
+  vehicleName: '2020 Toyota Camry XLE',
+  vehicleInfo1: 'Foreign used, first body',
+  vehicleInfo2: 'Accident free, clean title',
+  vehicleInfo3: 'Customs duty fully paid',
+};
+
 function Icon({ type }) {
   const common = 'h-4 w-4 text-slate-500';
 
@@ -61,6 +85,23 @@ function Icon({ type }) {
     return (
       <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden="true">
         <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (type === 'phone') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (type === 'location') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden="true">
+        <path d="M12 21s-7-4.35-7-10a7 7 0 1 1 14 0c0 5.65-7 10-7 10Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="11" r="2.5" stroke="currentColor" strokeWidth="1.7" />
       </svg>
     );
   }
@@ -166,6 +207,13 @@ export default function ReceiptForm({ onGenerate }) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleQuickFill = () => {
+    setFormData({
+      ...sampleFormData,
+      date: new Date().toISOString().split('T')[0],
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -187,13 +235,24 @@ export default function ReceiptForm({ onGenerate }) {
           <p className="text-sm text-slate-600">Smart, guided form for fast receipt generation.</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="min-w-[130px]">
             <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Progress</p>
             <div className="h-2 rounded-full bg-slate-200">
               <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${completion}%` }} />
             </div>
           </div>
+          <button
+            type="button"
+            onClick={handleQuickFill}
+            className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-100"
+            title="Populate form with sample data"
+          >
+            <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" aria-hidden="true">
+              <path d="m13 2-2 9h4L11 22l2-9H9l4-11Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Quick Fill
+          </button>
           <button
             type="button"
             onClick={() => setShowTips(true)}
@@ -219,7 +278,6 @@ export default function ReceiptForm({ onGenerate }) {
                   <div className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 transition focus-within:border-slate-500 focus-within:ring-2 focus-within:ring-slate-200">
                     <Icon type={icon} />
                     <input
-                      required
                       type={type}
                       placeholder={placeholder}
                       className="w-full border-0 p-0 text-slate-900 outline-none placeholder:text-slate-400"
